@@ -1,11 +1,17 @@
 // Imports
 import icons from 'url:../../img/icons.svg'; // app's icons-file
-import fracty from 'fracty';
+import fracty from 'fracty'; // converting decimal numbers to fraction numbers
 
+//
+//  Class for rendering recipe page
+//
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
 
+  // Method for rendering recipe page
+  //
+  // data: recipe data
   render(data) {
     this.#data = data;
 
@@ -17,11 +23,12 @@ class RecipeView {
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
+  // Private method to clear previous HTML from #parentElement
+  //
   #clear() {
     this.#parentElement.innerHTML = '';
   }
 
-  //
   // Method to show loading spinner while waiting real data.
   //
   // parentElement: element where spinner is placed
@@ -41,6 +48,21 @@ class RecipeView {
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
+  // Method to register event handler for events
+  // (publisher-subscriber pattern)
+  //
+  // handler: function that handles the events
+  //
+  addHandlerRender(handler) {
+    // 1. when hash of the location url changes show recipe for that hash
+    // 2. when page is loaded look for hash and show corresponding recipe
+    ['hashchange', 'load'].forEach(event =>
+      window.addEventListener(event, handler)
+    );
+  }
+
+  // Private method to generate recipe page HTML
+  //
   #generateMarkup() {
     return `
       <figure class="recipe__fig">
@@ -128,6 +150,10 @@ class RecipeView {
       `;
   }
 
+  // Private method for generating HTML for each ingredient
+  //
+  // ing: ingredient data. Object format: {quantity: 1.5, unit: 'pounds',
+  //      description: 'ground beef'}
   #generateMarkupIngredient(ing) {
     //
     // map ingredients to HTML elements
@@ -150,4 +176,6 @@ class RecipeView {
   }
 }
 
+// export new instance of class from this module
+//
 export default new RecipeView();
