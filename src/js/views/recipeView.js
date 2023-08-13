@@ -8,6 +8,8 @@ import fracty from 'fracty'; // converting decimal numbers to fraction numbers
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
+  #errorMessage = 'We could not find that recipe. Please try another one!';
+  #message = '';
 
   // Method for rendering recipe page
   //
@@ -42,6 +44,46 @@ class RecipeView {
        </svg>
      </div>
    `;
+
+    // First clear previous content then add spinner
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  // Method for showing errors to user.
+  //
+  // message: Error message that is shown on page. If no
+  //          message is given, show default(this.#errorMessage)
+  renderError(message = this.#errorMessage) {
+    const markup = `
+      <div class="error">
+        <div>
+          <svg>
+            <use href="${icons}#icon-alert-triangle"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>`;
+
+    // First clear previous content then add spinner
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  // Method for showing errors to user.
+  //
+  // message: Error message that is shown on page. If no
+  //          message is given, show default(this.#errorMessage)
+  renderMessage(message = this.#message) {
+    const markup = `
+      <div class="message">
+        <div>
+          <svg>
+            <use href="${icons}#icon-smile"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>`;
 
     // First clear previous content then add spinner
     this.#clear();
