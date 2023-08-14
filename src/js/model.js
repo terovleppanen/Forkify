@@ -29,6 +29,7 @@ export const loadRecipe = async function (recipeId) {
 
     // get recipe out of data by restructuring it
     const { recipe } = data.data;
+
     // add recipe information to state variable
     // rename some of the variables to better suits JS naming
     state.recipe = {
@@ -42,7 +43,7 @@ export const loadRecipe = async function (recipeId) {
       ingredients: recipe.ingredients,
     };
 
-    console.log(state.recipe);
+    // console.log(state.recipe);
   } catch (err) {
     // throw error that controller can handle it
     throw err;

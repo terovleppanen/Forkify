@@ -2,10 +2,16 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
+import resultsView from './views/resultsView.js';
 
 // transpiling and polyfilling
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+
+// just for Parcel
+if (module.hot) {
+  module.hot.accept();
+}
 
 //
 // controlRecipes
@@ -38,6 +44,9 @@ const controlRecipes = async function () {
 //
 const controlSeachResults = async function () {
   try {
+    // show spinner while loading results
+    resultsView.renderSpinner();
+
     // get query from view
     const query = searchView.getQuery();
 
@@ -47,7 +56,8 @@ const controlSeachResults = async function () {
     // request model to load search data for query
     await model.loadSearchResults(query);
 
-    console.log(model.state.search.results);
+    // render results in view
+    resultsView.render(model.state.search.results);
   } catch (err) {
     // !!!!temp
     console.error(err);

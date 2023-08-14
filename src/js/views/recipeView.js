@@ -8,90 +8,10 @@ import fracty from 'fracty'; // converting decimal numbers to fraction numbers
 //
 //  Class for rendering recipe page
 //
-class RecipeView {
+class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
-  _data;
   _errorMessage = 'We could not find that recipe. Please try another one!';
   _message = '';
-
-  // Method for rendering recipe page
-  //
-  // data: recipe data
-  render(data) {
-    this._data = data;
-
-    const markup = this._generateMarkup();
-
-    // remove previous html from recipe container
-    //  and add new recipe to container
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  // Private method to clear previous HTML from #parentElement
-  //
-  _clear() {
-    this._parentElement.innerHTML = '';
-  }
-
-  // Method to show loading spinner while waiting real data.
-  //
-  // parentElement: element where spinner is placed
-  //
-  renderSpinner() {
-    // construct HTML markup
-    const markup = `
-     <div class="spinner">
-       <svg>
-         <use href="${icons}#icon-loader"></use>
-       </svg>
-     </div>
-   `;
-
-    // First clear previous content then add spinner
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  // Method for showing errors to user.
-  //
-  // message: Error message that is shown on page. If no
-  //          message is given, show default(this._errorMessage)
-  renderError(message = this._errorMessage) {
-    const markup = `
-      <div class="error">
-        <div>
-          <svg>
-            <use href="${icons}#icon-alert-triangle"></use>
-          </svg>
-        </div>
-        <p>${message}</p>
-      </div>`;
-
-    // First clear previous content then add spinner
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  // Method for showing errors to user.
-  //
-  // message: Error message that is shown on page. If no
-  //          message is given, show default(this._errorMessage)
-  renderMessage(message = this._message) {
-    const markup = `
-      <div class="message">
-        <div>
-          <svg>
-            <use href="${icons}#icon-smile"></use>
-          </svg>
-        </div>
-        <p>${message}</p>
-      </div>`;
-
-    // First clear previous content then add spinner
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
 
   // Method to register event handler for events
   // (publisher-subscriber pattern)
@@ -152,11 +72,7 @@ class RecipeView {
           </div>
         </div>
 
-        <div class="recipe__user-generated">
-          <svg>
-            <use href="${icons}#icon-user"></use>
-          </svg>
-        </div>
+        <div class="recipe__user-generated"></div>
         <button class="btn--round">
           <svg class="">
             <use href="${icons}#icon-bookmark-fill"></use>
