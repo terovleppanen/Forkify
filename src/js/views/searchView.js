@@ -3,13 +3,13 @@
 //
 class SearchView {
   // parent element
-  #parentElement = document.querySelector('.search');
+  _parentElement = document.querySelector('.search');
 
   // Method for getting query value from input form. Returns search string.
   //
   getQuery() {
     // Get query from search field. Then clear the field and return query.
-    const query = this.#parentElement.querySelector('.search__field').value;
+    const query = this._parentElement.querySelector('.search__field').value;
     this.#clearInput();
 
     return query;
@@ -21,7 +21,7 @@ class SearchView {
   //
   addHandlerSearch(handler) {
     // create anonymous handler function that calls actual handler
-    this.#parentElement.addEventListener('submit', function (event) {
+    this._parentElement.addEventListener('submit', function (event) {
       // prevent form to reload page.
       event.preventDefault();
       // call the handler function given in parameter
@@ -29,10 +29,10 @@ class SearchView {
     });
   }
 
-  // Method for clearing search field
+  // Private method for clearing search field
   //
-  #clearInput() {
-    this.#parentElement.querySelector('.search__field').value = '';
+  _clearInput() {
+    this._parentElement.querySelector('.search__field').value = '';
   }
 }
 

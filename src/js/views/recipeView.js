@@ -1,3 +1,6 @@
+// parent class
+import View from './view.js';
+
 // Imports
 import icons from 'url:../../img/icons.svg'; // app's icons-file
 import fracty from 'fracty'; // converting decimal numbers to fraction numbers
@@ -6,29 +9,29 @@ import fracty from 'fracty'; // converting decimal numbers to fraction numbers
 //  Class for rendering recipe page
 //
 class RecipeView {
-  #parentElement = document.querySelector('.recipe');
-  #data;
-  #errorMessage = 'We could not find that recipe. Please try another one!';
-  #message = '';
+  _parentElement = document.querySelector('.recipe');
+  _data;
+  _errorMessage = 'We could not find that recipe. Please try another one!';
+  _message = '';
 
   // Method for rendering recipe page
   //
   // data: recipe data
   render(data) {
-    this.#data = data;
+    this._data = data;
 
-    const markup = this.#generateMarkup();
+    const markup = this._generateMarkup();
 
     // remove previous html from recipe container
     //  and add new recipe to container
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
   // Private method to clear previous HTML from #parentElement
   //
-  #clear() {
-    this.#parentElement.innerHTML = '';
+  _clear() {
+    this._parentElement.innerHTML = '';
   }
 
   // Method to show loading spinner while waiting real data.
@@ -46,15 +49,15 @@ class RecipeView {
    `;
 
     // First clear previous content then add spinner
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
   // Method for showing errors to user.
   //
   // message: Error message that is shown on page. If no
-  //          message is given, show default(this.#errorMessage)
-  renderError(message = this.#errorMessage) {
+  //          message is given, show default(this._errorMessage)
+  renderError(message = this._errorMessage) {
     const markup = `
       <div class="error">
         <div>
@@ -66,15 +69,15 @@ class RecipeView {
       </div>`;
 
     // First clear previous content then add spinner
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
   // Method for showing errors to user.
   //
   // message: Error message that is shown on page. If no
-  //          message is given, show default(this.#errorMessage)
-  renderMessage(message = this.#message) {
+  //          message is given, show default(this._errorMessage)
+  renderMessage(message = this._message) {
     const markup = `
       <div class="message">
         <div>
@@ -86,8 +89,8 @@ class RecipeView {
       </div>`;
 
     // First clear previous content then add spinner
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
   // Method to register event handler for events
@@ -105,14 +108,14 @@ class RecipeView {
 
   // Private method to generate recipe page HTML
   //
-  #generateMarkup() {
+  _generateMarkup() {
     return `
       <figure class="recipe__fig">
-        <img src="${this.#data.image}" alt="${
-      this.#data.title
+        <img src="${this._data.image}" alt="${
+      this._data.title
     }" class="recipe__img" />
         <h1 class="recipe__title">
-          <span>${this.#data.title}</span>
+          <span>${this._data.title}</span>
         </h1>
       </figure>
 
@@ -122,7 +125,7 @@ class RecipeView {
             <use href="${icons}#icon-clock"></use>
           </svg>
           <span class="recipe__info-data recipe__info-data--minutes">${
-            this.#data.cookingTime
+            this._data.cookingTime
           }</span>
           <span class="recipe__info-text">minutes</span>
         </div>
@@ -131,7 +134,7 @@ class RecipeView {
             <use href="${icons}#icon-users"></use>
           </svg>
           <span class="recipe__info-data recipe__info-data--people">${
-            this.#data.servings
+            this._data.servings
           }</span>
           <span class="recipe__info-text">servings</span>
 
@@ -165,7 +168,7 @@ class RecipeView {
         <h2 class="heading--2">Recipe ingredients</h2>
         <ul class="recipe__ingredient-list">
    
-        ${this.#data.ingredients.map(this.#generateMarkupIngredient).join('')}
+        ${this._data.ingredients.map(this._generateMarkupIngredient).join('')}
         </ul>
       </div>
 
@@ -174,13 +177,13 @@ class RecipeView {
         <p class="recipe__directions-text">
           This recipe was carefully designed and tested by
           <span class="recipe__publisher">${
-            this.#data.publisher
+            this._data.publisher
           }</span>. Please check out
           directions at their website.
         </p>
         <a
           class="btn--small recipe__btn"
-          href="${this.#data.sourceUrl}"
+          href="${this._data.sourceUrl}"
           target="_blank"
         >
           <span>Directions</span>
@@ -196,7 +199,7 @@ class RecipeView {
   //
   // ing: ingredient data. Object format: {quantity: 1.5, unit: 'pounds',
   //      description: 'ground beef'}
-  #generateMarkupIngredient(ing) {
+  _generateMarkupIngredient(ing) {
     //
     // map ingredients to HTML elements
     // example of ingredient:
