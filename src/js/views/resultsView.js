@@ -9,12 +9,15 @@ class ResultsView extends View {
   _errorMessage = 'No recipes found for your query! Please try again.';
   _message = '';
 
+  // Generates markup for search results
+  //
   _generateMarkup() {
-    console.log(this._data);
-
+    // call helper function to create each result
     return this._data.map(this._generateMarkupPreview).join('');
   }
 
+  // Generates markup for each individual result
+  //
   _generateMarkupPreview(result) {
     return `
          <li class="preview">

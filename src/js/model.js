@@ -1,5 +1,5 @@
 // imports
-import { API_URL } from './config.js';
+import { API_URL, RESULTS_PER_PAGE } from './config.js';
 import { getJSON } from './helpers.js';
 
 // for polyfilling
@@ -16,6 +16,8 @@ export const state = {
   search: {
     query: '',
     results: [],
+    page: 1,
+    resultsPerPage: RESULTS_PER_PAGE,
   },
 };
 
@@ -72,10 +74,24 @@ export const loadSearchResults = async function (query) {
         image: recipe.image_url,
       };
     });
-
-    console.log(state.search);
   } catch (err) {
     // throw error that controller can handle it
     throw err;
   }
+};
+
+// Function that returns search results that should be displayed
+// on given page. I.e. array of result objects.
+//
+// page: Page number which results are returned
+//
+export const getSearchResultsPage = function (page = state.search.page) {
+  state.search.page = page;
+
+  // count start and end indexes for pages
+  const start = (page - 1) * state.search.resultsPerPage;
+  const end = page * state.search.resultsPerPage;
+
+  // return part of results
+  return state.search.results.slice(start, end);
 };

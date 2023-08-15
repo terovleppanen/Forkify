@@ -29,7 +29,7 @@ class SearchView {
     });
   }
 
-  // Private method for clearing search field
+  // Method for clearing search field
   //
   _clearInput() {
     this._parentElement.querySelector('.search__field').value = '';

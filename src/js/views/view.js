@@ -27,7 +27,7 @@ export default class View {
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
-  // Private method to clear previous HTML from #parentElement
+  // Method to clear previous HTML from #parentElement
   //
   _clear() {
     this._parentElement.innerHTML = '';

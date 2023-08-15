@@ -26,7 +26,7 @@ class RecipeView extends View {
     );
   }
 
-  // Private method to generate recipe page HTML
+  // Method to generate recipe page HTML
   //
   _generateMarkup() {
     return `
@@ -111,7 +111,7 @@ class RecipeView extends View {
       `;
   }
 
-  // Private method for generating HTML for each ingredient
+  // Method for generating HTML for each ingredient
   //
   // ing: ingredient data. Object format: {quantity: 1.5, unit: 'pounds',
   //      description: 'ground beef'}

@@ -1,12 +1,13 @@
+// transpiling and polyfilling
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 // imports
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
-
-// transpiling and polyfilling
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+import paginationView from './views/paginationView.js';
 
 // just for Parcel
 if (module.hot) {
@@ -57,11 +58,25 @@ const controlSeachResults = async function () {
     await model.loadSearchResults(query);
 
     // render results in view
-    resultsView.render(model.state.search.results);
+    resultsView.render(model.getSearchResultsPage());
+
+    // render initial pagination buttons
+    paginationView.render(model.state.search);
   } catch (err) {
     // !!!!temp
     console.error(err);
   }
+};
+
+// Function handling button clicks in pagination
+//
+// goToPage: number of page we are moving
+const controlPagination = function (goToPage) {
+  // render new results in view
+  resultsView.render(model.getSearchResultsPage(goToPage));
+
+  // render new pagination buttons
+  paginationView.render(model.state.search);
 };
 
 // Initialize application
@@ -72,5 +87,7 @@ const init = function () {
   recipeView.addHandlerRender(controlRecipes);
   //  register controlSeachResults to handle events in SearchView
   searchView.addHandlerSearch(controlSeachResults);
+  //  register controlPagination to handle events to PaginationView
+  paginationView.addHandlerClick(controlPagination);
 };
 init();
