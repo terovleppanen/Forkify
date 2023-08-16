@@ -51,6 +51,25 @@ class RecipeView extends View {
     });
   }
 
+  // Method for adding handler to add recipe to bookmarks
+  // i.e. for click event of bookmark button
+  //
+  // handler: handler that is called
+  //
+  addHandlerAddBookmark(handler) {
+    // Use event delegation to add handler to button.
+    this._parentElement.addEventListener('click', function (event) {
+      // get button if user clicked within button
+      const btn = event.target.closest('.btn--bookmark');
+
+      // if null it wasn't button that was clicked
+      if (!btn) return;
+
+      // notify handler
+      handler();
+    });
+  }
+
   // Method to generate recipe page HTML
   //
   _generateMarkup() {
@@ -102,9 +121,11 @@ class RecipeView extends View {
         </div>
 
         <div class="recipe__user-generated"></div>
-        <button class="btn--round">
+        <button class="btn--round btn--bookmark">
           <svg class="">
-            <use href="${icons}#icon-bookmark-fill"></use>
+            <use href="${icons}#icon-bookmark${
+      this._data.bookmarked ? '-fill' : ''
+    }"></use>
           </svg>
         </button>
       </div>

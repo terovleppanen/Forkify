@@ -94,6 +94,17 @@ const controlServings = function (newServings) {
   recipeView.update(model.state.recipe);
 };
 
+// Funtion to handle adding bookarks
+const controlAddBookmark = function () {
+  // if recipe is not bookmarked -> bookmark it
+  // otherwise remove bookmark
+  if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
+  else model.deleteBookmark(model.state.recipe.id);
+
+  // update recipe view
+  recipeView.update(model.state.recipe);
+};
+
 // Initialize application
 //
 const init = function () {
@@ -103,6 +114,8 @@ const init = function () {
   recipeView.addHandlerRender(controlRecipes);
   // and subscribe to handle servings buttons
   recipeView.addHandlerUpdateServings(controlServings);
+  // register for bookmark clicks
+  recipeView.addHandlerAddBookmark(controlAddBookmark);
   //  register controlSeachResults to handle events in SearchView
   searchView.addHandlerSearch(controlSeachResults);
   //  register controlPagination to handle events to PaginationView

@@ -19,6 +19,8 @@ export const state = {
     page: 1,
     resultsPerPage: RESULTS_PER_PAGE,
   },
+  // Array for bookmarks
+  bookmarks: [],
 };
 
 // Function that loads recipe data from remote API
@@ -45,7 +47,10 @@ export const loadRecipe = async function (recipeId) {
       ingredients: recipe.ingredients,
     };
 
-    // console.log(state.recipe);
+    // Check if current recipe id is in bookmark array
+    if (state.bookmarks.some(bookmark => bookmark.id === recipeId))
+      state.recipe.bookmarked = true;
+    else state.recipe.bookmarked = false;
   } catch (err) {
     // throw error that controller can handle it
     throw err;
@@ -110,4 +115,31 @@ export const updateServings = function (newServings) {
   });
 
   state.recipe.servings = newServings;
+};
+
+// Add recipe to bookmarks
+//
+// recipe: recipe object which is bookmarked
+//
+export const addBookmark = function (recipe) {
+  // Add recipe object to bookmark array
+  state.bookmarks.push(recipe);
+
+  // Mark current recipe as bookmarked
+  if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+};
+
+// Remove recipe from bookmarks
+//
+// recipeId: Id of recipe being removed
+//
+export const deleteBookmark = function (recipeId) {
+  // find index of right recipe
+  const index = state.bookmarks.findIndex(recipe => recipe.id === recipeId);
+
+  // and remove it from bookmarks array
+  state.bookmarks.splice(index, 1);
+
+  // Mark current recipe as not bookmarked
+  if (recipeId === state.recipe.id) state.recipe.bookmarked = false;
 };
