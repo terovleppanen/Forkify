@@ -79,12 +79,26 @@ const controlPagination = function (goToPage) {
   paginationView.render(model.state.search);
 };
 
+// Function to change servings count in recipes.
+//
+const controlServings = function (newServings) {
+  // Update the recipe servings(in state)
+  model.updateServings(newServings);
+
+  //  Update the recipe view by rendering it again
+  //  with new values
+  recipeView.render(model.state.recipe);
+};
+
 // Initialize application
 //
 const init = function () {
-  // register controlRecipes to handle events in RecipeView
+  // register controlRecipes to handle 'hashchange'
+  // and 'load' events in RecipeView
   // publisher-subcriber pattern.
   recipeView.addHandlerRender(controlRecipes);
+  // and subscribe to handle servings buttons
+  recipeView.addHandlerUpdateServings(controlServings);
   //  register controlSeachResults to handle events in SearchView
   searchView.addHandlerSearch(controlSeachResults);
   //  register controlPagination to handle events to PaginationView

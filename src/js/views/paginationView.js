@@ -13,11 +13,13 @@ class PaginationView extends View {
   addHandlerClick(handler) {
     // add handler to parent element
     this._parentElement.addEventListener('click', function (event) {
-      // get button that was clicked
+      // find button that was clicked
+      // gets all click events from _parentElement, then
+      // checks if they happened within buttons
+      // if click is outside buttons is undefined
       const btn = event.target.closest('.btn--inline');
 
       // If there is not button return immediately
-      // I.e. user clicked parent element outside of buttons
       if (!btn) return;
 
       // read next page from dataset value named goto

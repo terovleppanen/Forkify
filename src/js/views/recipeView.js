@@ -14,6 +14,7 @@ class RecipeView extends View {
   _message = '';
 
   // Method to register event handler for events
+  // 'hashchange', 'load'
   // (publisher-subscriber pattern)
   //
   // handler: function that handles the events
@@ -24,6 +25,30 @@ class RecipeView extends View {
     ['hashchange', 'load'].forEach(event =>
       window.addEventListener(event, handler)
     );
+  }
+
+  // Method for subcribe to handle servings buttons clicks
+  //
+  // handler: handler that is called on button clicks
+  //
+  addHandlerUpdateServings(handler) {
+    // Use event delegation for listening buttons
+    this._parentElement.addEventListener('click', function (event) {
+      // check if clicks happened within buttons
+      // if was outside of buttons btn will be null
+      const btn = event.target.closest('.btn--update-servings');
+
+      // if null, click wasn't on buttons -> exit
+      if (!btn) return;
+
+      // read updateTo dataset value from button
+      const updateTo = +btn.dataset.updateTo;
+
+      // Call handler (subscriber), pass new servings amount
+      // to handler.
+      // Only do call if servings doesn't go under 1
+      if (updateTo > 0) handler(updateTo);
+    });
   }
 
   // Method to generate recipe page HTML
@@ -59,12 +84,16 @@ class RecipeView extends View {
           <span class="recipe__info-text">servings</span>
 
           <div class="recipe__info-buttons">
-            <button class="btn--tiny btn--increase-servings">
+            <button class="btn--tiny btn--update-servings" data-update-to="${
+              this._data.servings - 1
+            }">
               <svg>
                 <use href="${icons}#icon-minus-circle"></use>
               </svg>
             </button>
-            <button class="btn--tiny btn--increase-servings">
+            <button class="btn--tiny btn--update-servings" data-update-to="${
+              this._data.servings + 1
+            }">
               <svg>
                 <use href="${icons}#icon-plus-circle"></use>
               </svg>
