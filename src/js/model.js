@@ -74,6 +74,9 @@ export const loadSearchResults = async function (query) {
         image: recipe.image_url,
       };
     });
+
+    // after new search, reset page to 1
+    state.search.page = 1;
   } catch (err) {
     // throw error that controller can handle it
     throw err;

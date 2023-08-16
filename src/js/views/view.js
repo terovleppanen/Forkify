@@ -51,6 +51,7 @@ export default class View {
     // For each element in newElements, check if it's the same as
     // in currentElements
     newElements.forEach((newElement, i) => {
+      // gte corresponding currentElement
       const currentELement = currentElements[i];
 
       // Updates changed text
