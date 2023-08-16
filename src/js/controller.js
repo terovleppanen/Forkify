@@ -25,6 +25,9 @@ const controlRecipes = async function () {
     // if there's no hash stop function
     if (!id) return;
 
+    // Update results view to mark selected result
+    resultsView.update(model.getSearchResultsPage());
+
     // Render loading spinner
     recipeView.renderSpinner();
 
@@ -87,7 +90,8 @@ const controlServings = function (newServings) {
 
   //  Update the recipe view by rendering it again
   //  with new values
-  recipeView.render(model.state.recipe);
+  // recipeView.render(model.state.recipe);
+  recipeView.update(model.state.recipe);
 };
 
 // Initialize application

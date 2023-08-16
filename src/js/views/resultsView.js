@@ -19,9 +19,15 @@ class ResultsView extends View {
   // Generates markup for each individual result
   //
   _generateMarkupPreview(result) {
+    // Get current id of page an if it's same mark corresponding
+    // result line with class 'preview__link--active'
+    const id = window.location.hash.slice(1);
+
     return `
          <li class="preview">
-            <a class="preview__link" href="#${result.id}">
+            <a class="preview__link ${
+              result.id === id ? 'preview__link--active' : ''
+            }" href="#${result.id}">
             <figure class="preview__fig">
                <img src="${result.image}" alt="${result.title}" />
             </figure>
