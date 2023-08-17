@@ -8,6 +8,7 @@ import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
+import bookmarksView from './views/bookmarksView.js';
 
 // just for Parcel
 if (module.hot) {
@@ -27,6 +28,7 @@ const controlRecipes = async function () {
 
     // Update results view to mark selected result
     resultsView.update(model.getSearchResultsPage());
+    bookmarksView.update(model.state.bookmarks);
 
     // Render loading spinner
     recipeView.renderSpinner();
@@ -103,6 +105,9 @@ const controlAddBookmark = function () {
 
   // update recipe view
   recipeView.update(model.state.recipe);
+
+  // render bookmarks in bookmarks list
+  bookmarksView.render(model.state.bookmarks);
 };
 
 // Initialize application
