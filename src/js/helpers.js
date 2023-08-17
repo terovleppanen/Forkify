@@ -33,3 +33,31 @@ export const getJSON = async function (url) {
     throw err;
   }
 };
+
+// Send JSON data to url
+//
+// url: URL to send to
+//
+export const sendJSON = async function (url, uploadData) {
+  try {
+    const fetchProm = fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(uploadData),
+    });
+
+    // fetch and then get data
+    // use timeout function to terminate fetch if it's taking too long
+    const res = await Promise.race([fetchProm, timeout(TIMEOUT_SEC)]);
+    const data = await res.json();
+
+    // if response header ok was unsuccesful throw error
+    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};

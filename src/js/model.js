@@ -1,6 +1,8 @@
 // imports
 import { API_URL, RESULTS_PER_PAGE } from './config.js';
-import { getJSON } from './helpers.js';
+import { getJSON, sendJSON } from './helpers.js';
+// keys won't be on Github so own module
+import { KEY } from './keys.js';
 
 // for polyfilling
 import { async } from 'regenerator-runtime';
@@ -23,6 +25,27 @@ export const state = {
   bookmarks: [],
 };
 
+// Create recipe object used by application
+//
+// data: Data we get from remote API
+//
+const createRecipeObject = function (data) {
+  // get recipe out of data by restructuring it
+  const { recipe } = data.data;
+
+  return {
+    id: recipe.id,
+    title: recipe.title,
+    publisher: recipe.publisher,
+    sourceUrl: recipe.source_url,
+    image: recipe.image_url,
+    servings: recipe.servings,
+    cookingTime: recipe.cooking_time,
+    ingredients: recipe.ingredients,
+    ...(recipe.key && { key: recipe.key }),
+  };
+};
+
 // Function that loads recipe data from remote API
 //
 // recipeId: id of the recipe which is fetched
@@ -31,21 +54,8 @@ export const loadRecipe = async function (recipeId) {
   try {
     const data = await getJSON(`${API_URL}${recipeId}`);
 
-    // get recipe out of data by restructuring it
-    const { recipe } = data.data;
-
     // add recipe information to state variable
-    // rename some of the variables to better suits JS naming
-    state.recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients,
-    };
+    state.recipe = createRecipeObject(data);
 
     // Check if current recipe id is in bookmark array
     if (state.bookmarks.some(bookmark => bookmark.id === recipeId))
@@ -172,3 +182,55 @@ const clearBookmarks = function () {
   localStorage.clear('bookmarks');
 };
 // clearBookmarks();
+
+export const uploadRecipe = async function (newRecipe) {
+  try {
+    // construct valid ingredients array
+    //
+    // convert recipe to array of entries
+    // for used with array methods
+    const ingredients = Object.entries(newRecipe)
+      // filter entries that are ingredient and are not empty
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+      .map(ing => {
+        // remove whitespace and split string to array
+        const ingArr = ing[1].replaceAll(' ', '').split(',');
+
+        // check ing entry contained all 3 values
+        if (ingArr.length !== 3)
+          throw new Error(
+            'Wrong ingredient format! Please use the correct format.'
+          );
+
+        // destructure array
+        const [quantity, unit, description] = ingArr;
+
+        // return object in format quantity(number), unit, description
+        // convert quantity to number or if it doesn't exists
+        // set to null
+        return { quantity: quantity ? +quantity : null, unit, description };
+      });
+
+    // construct recipe in right format
+    const recipe = {
+      title: newRecipe.title,
+      source_url: newRecipe.sourceUrl,
+      image_url: newRecipe.image,
+      publisher: newRecipe.publisher,
+      cooking_time: +newRecipe.cookingTime,
+      servings: +newRecipe.servings,
+      ingredients,
+    };
+
+    // send recipe to remote API
+    const data = await sendJSON(`${API_URL}?key=${KEY}`, recipe);
+
+    // add newly added recipe to current recipe in state
+    state.recipe = createRecipeObject(data);
+
+    // bookmark recipe
+    addBookmark(state.recipe);
+  } catch (err) {
+    throw err;
+  }
+};
