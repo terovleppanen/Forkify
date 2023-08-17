@@ -10,6 +10,12 @@ class BookmarksView extends View {
   _errorMessage = 'No bookmarks yet. Find a nice recipe and bookmark it!';
   _message = '';
 
+  // Register handler for load event
+  //
+  addHandlerRender(handler) {
+    window.addEventListener('load', handler);
+  }
+
   // Generates markup for bookmarks
   //
   _generateMarkup() {

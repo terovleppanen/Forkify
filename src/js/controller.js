@@ -26,12 +26,14 @@ const controlRecipes = async function () {
     // if there's no hash stop function
     if (!id) return;
 
-    // Update results view to mark selected result
-    resultsView.update(model.getSearchResultsPage());
-    bookmarksView.update(model.state.bookmarks);
-
     // Render loading spinner
     recipeView.renderSpinner();
+
+    // Update results view to mark selected result
+    resultsView.update(model.getSearchResultsPage());
+
+    // Update bookmarks view
+    bookmarksView.update(model.state.bookmarks);
 
     // Load recipe
     await model.loadRecipe(id);
@@ -42,6 +44,7 @@ const controlRecipes = async function () {
     // Error handling
     // Call view to show error to user.
     recipeView.renderError();
+    console.error(err);
   }
 };
 
@@ -110,9 +113,15 @@ const controlAddBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+const controlBookmarks = function () {
+  bookmarksView.render(model.state.bookmarks);
+};
+
 // Initialize application
 //
 const init = function () {
+  // handle bookmarks load
+  bookmarksView.addHandlerRender(controlBookmarks);
   // register controlRecipes to handle 'hashchange'
   // and 'load' events in RecipeView
   // publisher-subcriber pattern.
