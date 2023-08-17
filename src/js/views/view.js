@@ -10,7 +10,9 @@ export default class View {
   // Method for rendering recipe page
   //
   // data: recipe data
-  render(data) {
+  // render: true(default) renders to page, false returns
+  //         markup as string
+  render(data, render = true) {
     // check if data is available
     // continue only if not undefined or null,
     // is Array and array.length is not 0
@@ -21,6 +23,9 @@ export default class View {
 
     // generateRecipe markup to show
     const markup = this._generateMarkup();
+
+    // if render = false return markup as string instead
+    if (!render) return markup;
 
     // remove previous html from recipe container
     //  and add new recipe to container
@@ -82,7 +87,7 @@ export default class View {
     });
   }
 
-  // Method to clear previous HTML from #parentElement
+  // Method to clear previous HTML from _parentElement
   //
   _clear() {
     this._parentElement.innerHTML = '';
