@@ -9,6 +9,7 @@ import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
+import addRecipeView from './views/addRecipeView.js';
 
 // just for Parcel
 if (module.hot) {
@@ -113,8 +114,18 @@ const controlAddBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+// Call view to render bookmarks
+//
 const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
+};
+
+// Handle recipe upload
+//
+// newRecipe: New recipe added from form
+//
+const controlAddRecipe = function (newRecipe) {
+  console.log(newRecipe);
 };
 
 // Initialize application
@@ -130,9 +141,11 @@ const init = function () {
   recipeView.addHandlerUpdateServings(controlServings);
   // register for bookmark clicks
   recipeView.addHandlerAddBookmark(controlAddBookmark);
-  //  register controlSeachResults to handle events in SearchView
+  // register controlSeachResults to handle events in SearchView
   searchView.addHandlerSearch(controlSeachResults);
-  //  register controlPagination to handle events to PaginationView
+  // register controlPagination to handle events to PaginationView
   paginationView.addHandlerClick(controlPagination);
+  // register handler for recipe upload
+  addRecipeView.addHandlerUpload(controlAddRecipe);
 };
 init();
