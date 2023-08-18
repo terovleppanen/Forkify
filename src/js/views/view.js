@@ -7,11 +7,17 @@ import icons from 'url:../../img/icons.svg'; // app's icons-file
 export default class View {
   _data;
 
-  // Method for rendering recipe page
-  //
-  // data: recipe data
-  // render: true(default) renders to page, false returns
-  //         markup as string
+  /**
+   * Render the received object to the DOM
+   *
+   * @param {Object | Object[]} data The data to be rendered (e.g. recipe)
+   * @param {boolean} [render=true] If false, create markup string instead of rendering to the DOM
+   *
+   * @returns {undefined | string} A markup string is returned if render=false
+   *
+   * @this {Object} View instance
+   *
+   */
   render(data, render = true) {
     // check if data is available
     // continue only if not undefined or null,
