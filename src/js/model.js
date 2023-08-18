@@ -1,6 +1,6 @@
 // imports
 import { API_URL, RESULTS_PER_PAGE } from './config.js';
-import { getJSON, sendJSON } from './helpers.js';
+import { AJAX } from './helpers.js';
 // keys won't be on Github so own module
 import { KEY } from './keys.js';
 
@@ -52,7 +52,7 @@ const createRecipeObject = function (data) {
 //
 export const loadRecipe = async function (recipeId) {
   try {
-    const data = await getJSON(`${API_URL}${recipeId}`);
+    const data = await AJAX(`${API_URL}${recipeId}?key=${KEY}`);
 
     // add recipe information to state variable
     state.recipe = createRecipeObject(data);
@@ -77,7 +77,7 @@ export const loadSearchResults = async function (query) {
     state.search.query = query;
 
     // search from API using query
-    const data = await getJSON(`${API_URL}?search=${query}`);
+    const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
 
     // save results to state
     // map over results and for each search result make new array entry
@@ -87,6 +87,7 @@ export const loadSearchResults = async function (query) {
         title: recipe.title,
         publisher: recipe.publisher,
         image: recipe.image_url,
+        ...(recipe.key && { key: recipe.key }),
       };
     });
 
@@ -193,8 +194,8 @@ export const uploadRecipe = async function (newRecipe) {
       // filter entries that are ingredient and are not empty
       .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
       .map(ing => {
-        // remove whitespace and split string to array
-        const ingArr = ing[1].replaceAll(' ', '').split(',');
+        //  split string to array and remove whitespaces
+        const ingArr = ing[1].split(',').map(el => el.trim());
 
         // check ing entry contained all 3 values
         if (ingArr.length !== 3)
@@ -223,7 +224,7 @@ export const uploadRecipe = async function (newRecipe) {
     };
 
     // send recipe to remote API
-    const data = await sendJSON(`${API_URL}?key=${KEY}`, recipe);
+    const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
 
     // add newly added recipe to current recipe in state
     state.recipe = createRecipeObject(data);

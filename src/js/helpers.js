@@ -14,6 +14,44 @@ const timeout = function (seconds) {
   });
 };
 
+// Function either sends or receives JSON data from remote API.
+// If uploadData is sent it sends if not we get data from API.
+//
+// url: URL
+// uploadData: (undefined by default) Data we upload to API.
+//             If not defined, we get data.
+//
+export const AJAX = async function (url, uploadData = undefined) {
+  try {
+    // Construct promise depending if we got uploadData or not
+    const fetchPromise = uploadData
+      ? fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(uploadData),
+        })
+      : fetch(url);
+
+    // fetch and then get data
+    // use timeout function to terminate fetch if it's taking too long
+    const res = await Promise.race([fetchPromise, timeout(TIMEOUT_SEC)]);
+    const data = await res.json();
+
+    // if response header ok was unsuccesful throw error
+    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+/*
+* Two functions from AJAX was refactored.
+*
+
 // getJSON
 // Retrieve data from given url
 //
@@ -61,3 +99,4 @@ export const sendJSON = async function (url, uploadData) {
     throw err;
   }
 };
+*/
